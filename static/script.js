@@ -60,6 +60,7 @@ function fetchBlockchain() {
     fetch("/get_chain")
     .then(response => response.json())
     .then(data => {
+        console.log("Fetched Blockchain:", data); // Log blockchain data
         const blockchainDiv = document.getElementById("blockchain");
         blockchainDiv.innerHTML = ""; 
 
@@ -73,19 +74,23 @@ function fetchBlockchain() {
 
             const blockDiv = document.createElement("div");
             blockDiv.classList.add("block");
-            blockDiv.innerHTML = 
+            blockDiv.innerHTML = `
                 <p><strong>Index:</strong> ${block.index}</p>
                 <p><strong>Timestamp:</strong> ${block.timestamp}</p>
                 <p><strong>Transactions:</strong> ${JSON.stringify(block.transactions)}</p>
                 <p><strong>Previous Hash:</strong> ${block.previous_hash}</p>
                 <p><strong>Hash:</strong> ${block.hash}</p>
-            ;
+            `;
             blockchainDiv.appendChild(blockDiv);
         });
-    }).catch(() => {
+    }).catch(err => {
+        console.error("Fetch Blockchain Error:", err); // Log error
         showNotification("❌ Failed to fetch blockchain!", true);
     });
 }
+
+setInterval(fetchBlockchain, 10000); // Increase interval to avoid excessive requests
+
 
 function resetBlockchain() {
     fetch('/reset_chain', { method: 'POST' })
