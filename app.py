@@ -43,20 +43,20 @@ class Blockchain:
         self.chain.append(new_block)
 
     def is_chain_valid(self):
-    for i in range(1, len(self.chain)):
-        current_block = self.chain[i]
-        previous_block = self.chain[i - 1]
+        for i in range(1, len(self.chain)):
+            current_block = self.chain[i]
+            previous_block = self.chain[i - 1]
 
-        
-        if current_block.find_hash() != current_block.hash:
-            print(f"Block {i} has been tampered with!")
-            return False
+            if current_block.find_hash() != current_block.hash:
+                print(f"Block {i} has been tampered with!")
+                return False
 
-        if current_block.previous_hash != previous_block.find_hash():  
-            print(f"Block {i} is incorrectly linked to Block {i-1}!")
-            return False
+            if current_block.previous_hash != previous_block.find_hash():
+                print(f"Block {i} is incorrectly linked to Block {i-1}!")
+                return False
 
-    return True
+        return True
+
 
     def reset_chain(self):
         """Resets the blockchain to its initial state with only the genesis block."""
