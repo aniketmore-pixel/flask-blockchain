@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Visualizer</title>
+    <link rel="stylesheet" href="../static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body onload="fetchBlockchain()">
+    <div class="container">
+        <h1>Blockchain Visualizer</h1>
+
+        <hr />
+
+        <h3>Current Blockchain:</h3>
+        <div id="blockchain"></div>
+        <div id="currentBlockchainDialog" class="dialogue">Displaying the current state of the blockchain...</div>
+
+        <hr />
+
+        <h3>Add a New Block</h3>
+        <input type="text" id="transactions" placeholder="Enter transactions (comma separated)">
+        <button onclick="addBlock()">Add Block</button>
+        <div id="addBlockDialog" class="dialogue">You can add a new block to the blockchain by providing transaction details.</div>
+
+        <hr />
+
+        <h3>Validate Blockchain</h3>
+        <button onclick="validateBlockchain()">Check Validity</button>
+        <div id="validateBlockchainDialog" class="dialogue">Checking if the blockchain is valid and intact...</div>
+
+        <hr />    
+
+        <h3>Modify a Block (Tamper with Blockchain)</h3>
+        <input type="number" id="blockIndex" placeholder="Block Index">
+        <input type="text" id="newTransactions" placeholder="New Transactions (comma separated)">
+        <button onclick="tamperBlock()">Tamper Block</button>
+        <div id="tamperBlockDialog" class="dialogue">Altering block data will disrupt blockchain integrity!</div>
+
+        <hr />
+        <h3>Reset</h3>
+        <button id="resetButton" onclick="resetBlockchain()">Reset Blockchain</button>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script src="../static/script.js"></script>
+</body>
+</html>
