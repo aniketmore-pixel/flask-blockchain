@@ -12,12 +12,14 @@ function addBlock() {
         body: JSON.stringify({ transactions: transactions.split(",") })
     }).then(response => response.json())
     .then(data => {
+        console.log("✅ Block Added:", data);
         showNotification("✅ " + data.message);
         fetchBlockchain();
     }).catch(() => {
+        console.error("❌ Failed to add block!");
         showNotification("❌ Failed to add block!", true);
     });
-    
+
     document.getElementById("transactions").value = ""; 
 }
 
@@ -36,12 +38,14 @@ function tamperBlock() {
         body: JSON.stringify({ index: parseInt(blockIndex), transactions: newTransactions.split(",") })
     }).then(response => response.json())
     .then(data => {
+        console.warn("⚠️ Block Tampered:", data);
         showNotification("⚠️ " + data.message, true);
         fetchBlockchain();
     }).catch(() => {
+        console.error("❌ Failed to tamper block!");
         showNotification("❌ Failed to tamper block!", true);
     });
-    
+
     document.getElementById("blockIndex").value = "";
     document.getElementById("newTransactions").value = "";
 }
@@ -50,8 +54,10 @@ function validateBlockchain() {
     fetch("/validate_chain")
     .then(response => response.json())
     .then(data => {
+        console.log("🔍 Blockchain Validation Result:", data);
         showNotification(data.valid ? "✅ Blockchain is valid!" : "❌ Blockchain is tampered!", !data.valid);
     }).catch(() => {
+        console.error("❌ Failed to validate blockchain!");
         showNotification("❌ Failed to validate blockchain!", true);
     });
 }
@@ -60,6 +66,8 @@ function fetchBlockchain() {
     fetch("/get_chain")
     .then(response => response.json())
     .then(data => {
+        console.log("📜 Current Blockchain:", data);
+        
         const blockchainDiv = document.getElementById("blockchain");
         blockchainDiv.innerHTML = ""; 
 
@@ -83,6 +91,7 @@ function fetchBlockchain() {
             blockchainDiv.appendChild(blockDiv);
         });
     }).catch(() => {
+        console.error("❌ Failed to fetch blockchain!");
         showNotification("❌ Failed to fetch blockchain!", true);
     });
 }
@@ -91,15 +100,29 @@ function resetBlockchain() {
     fetch('/reset_chain', { method: 'POST' })
         .then(response => response.json())
         .then(data => {
+            console.log("🔄 Blockchain Reset:", data);
             showNotification("🔄 " + data.message);
             fetchBlockchain();
         })
         .catch(() => {
+            console.error("❌ Failed to reset blockchain!");
             showNotification("❌ Failed to reset blockchain!", true);
         });
 }
 
+// Fetch logs from the server and print them to the console
+function fetchLogs() {
+    fetch('/get_logs')
+        .then(response => response.json())
+        .then(data => {
+            console.log("📝 Server Logs:", data.logs);
+        })
+        .catch(() => {
+            console.error("❌ Failed to fetch logs!");
+        });
+}
 
+// Show notifications on UI
 function showNotification(message, isError = false) {
     const notification = document.getElementById("notification");
     notification.textContent = message;
@@ -114,4 +137,8 @@ function showNotification(message, isError = false) {
     }, 3000);
 }
 
-setInterval(fetchBlockchain, 5000); // Auto-update blockchain every 5s
+// Auto-update blockchain and logs every 5s
+setInterval(() => {
+    fetchBlockchain();
+    fetchLogs();
+}, 5000);
