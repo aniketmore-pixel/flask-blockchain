@@ -47,15 +47,18 @@ class Blockchain:
             current_block = self.chain[i]
             previous_block = self.chain[i - 1]
 
-            if current_block.find_hash() != current_block.hash:
-                print(f"Block {i} has been tampered with!")
+            # 🔥 Fix: Compare stored hash vs recalculated hash
+            if current_block.hash != current_block.find_hash():
+                print(f"⚠️ Block {i} has been tampered with!")
                 return False
 
-            if current_block.previous_hash != previous_block.find_hash():
-                print(f"Block {i} is incorrectly linked to Block {i-1}!")
+            # 🔥 Fix: Ensure chain integrity (previous_hash link)
+            if current_block.previous_hash != previous_block.hash:
+                print(f"⚠️ Block {i} is incorrectly linked to Block {i-1}!")
                 return False
-
+                
         return True
+
 
 
     def reset_chain(self):
