@@ -42,27 +42,30 @@ class Blockchain:
         new_block.mine_block(self.difficulty)
         self.chain.append(new_block)
 
-    def is_chain_valid(self):
-        for i in range(1, len(self.chain)):
-            current_block = self.chain[i]
-            previous_block = self.chain[i - 1]
+    @app.route("/validate_chain", methods=["GET"])
 
-            # Check if the stored hash matches the recalculated hash
+    def validate_chain():
+        validation_logs = []
+    
+        for i in range(1, len(aniket_blockchain.chain)):
+            current_block = aniket_blockchain.chain[i]
+            previous_block = aniket_blockchain.chain[i - 1]
+
+            # Check if stored hash matches recalculated hash
             if current_block.hash != current_block.find_hash():
-                print(f"⚠️ Block {i} hash mismatch!")
-                print(f"Stored Hash: {current_block.hash}")
-                print(f"Recalculated Hash: {current_block.find_hash()}")
-                return False
+                log_message = f"⚠️ Block {i} hash mismatch! Stored: {current_block.hash}, Recalculated: {current_block.find_hash()}"
+                validation_logs.append(log_message)
+                return jsonify({"valid": False, "logs": validation_logs})
 
             # Check if previous_hash links correctly
             if current_block.previous_hash != previous_block.hash:
-                print(f"⚠️ Block {i} has wrong previous_hash!")
-                print(f"Stored previous_hash: {current_block.previous_hash}")
-                print(f"Expected previous_hash: {previous_block.hash}")
-                return False
+                log_message = f"⚠️ Block {i} has wrong previous_hash! Stored: {current_block.previous_hash}, Expected: {previous_block.hash}"
+                validation_logs.append(log_message)
+                return jsonify({"valid": False, "logs": validation_logs})
 
-        print("✅ Blockchain is valid.")
-        return True
+        validation_logs.append("✅ Blockchain is valid.")
+        return jsonify({"valid": True, "logs": validation_logs})
+
 
 
 
