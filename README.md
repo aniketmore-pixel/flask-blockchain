@@ -1,4 +1,4 @@
-# Blockchain Visualization 📦🚀
+# Blockchain Visualizer 📦🚀
 
 This is a simple **Blockchain-based web application** built using **Flask** (Python backend) and **HTML, CSS, JavaScript** (frontend). It allows users to:
 
